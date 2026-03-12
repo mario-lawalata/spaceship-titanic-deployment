@@ -2,7 +2,6 @@
 Session 04 – Step 2: Preprocessing
 Reads ingested data, splits, scales, and saves the preprocessor artifact.
 """
-
 import os
 import pandas as pd
 import joblib
@@ -14,26 +13,24 @@ from sklearn.pipeline import Pipeline
 
 def preprocess():
     os.makedirs("artifacts", exist_ok=True)
-    # 1. Baca data Titanic
-    df = pd.read_csv("train.csv")
+    df = pd.read_csv("ingested/spaceship_train.csv")
 
-    # 2. Feature Engineering (Pecah Cabin)
+    # Feature Engineering: Memecah kolom Cabin menjadi 3 fitur baru
     df[['Deck', 'Num', 'Side']] = df['Cabin'].str.split('/', expand=True)
     df['Num'] = pd.to_numeric(df['Num'], errors='coerce')
 
-    # 3. Tentukan Fitur (13 fitur)
+    # Daftar 13 fitur sesuai permintaan
     num_features = ['Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck', 'Num']
     cat_features = ['HomePlanet', 'CryoSleep', 'Destination', 'VIP', 'Deck', 'Side']
     
-    # Targetnya adalah 'Transported', BUKAN 'species'
     X = df[num_features + cat_features]
     y = df['Transported'].astype(int)
 
-    # 4. Pipeline Preprocessing
     num_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
         ('scaler', StandardScaler())
     ])
+
     cat_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='most_frequent')),
         ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
@@ -49,14 +46,11 @@ def preprocess():
     X_train_proc = preprocessor.fit_transform(X_train)
     X_test_proc = preprocessor.transform(X_test)
 
-    # Simpan preprocessor ke artifacts
+    # Simpan Preprocessor
     joblib.dump(preprocessor, "artifacts/preprocessor.pkl")
 
     train_df = pd.concat([pd.DataFrame(X_train_proc), y_train.reset_index(drop=True)], axis=1)
     test_df = pd.concat([pd.DataFrame(X_test_proc), y_test.reset_index(drop=True)], axis=1)
     
-    print("✅ Preprocessing Selesai untuk Dataset Titanic.")
+    print("✅ Preprocessing Selesai. preprocessor.pkl disimpan.")
     return train_df, test_df
-
-if __name__ == "__main__":
-    preprocess()
