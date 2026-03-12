@@ -1,0 +1,23 @@
+artifact_path: /Users/mariolawalatagmail.com/Downloads/Streamlit Cloud Ready Code/mlruns/2/models/m-ecb6c050e03741d788a55e4b36cc6e48/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.5.1
+    skops_trusted_types: null
+mlflow_version: 3.10.0
+model_id: m-ecb6c050e03741d788a55e4b36cc6e48
+model_size_bytes: 130984
+model_uuid: m-ecb6c050e03741d788a55e4b36cc6e48
+prompts: null
+run_id: 0a2ebf85c62d4f338703dcba55f40090
+utc_time_created: '2026-03-12 13:58:21.603372'
